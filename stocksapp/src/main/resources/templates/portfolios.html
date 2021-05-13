@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All_Users</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="/css/companies.css"/>
+    <style>
+        .logo-icon {
+            width: 42px;
+            height: 45px;
+            margin-top: 8px;
+        }
+        h4, h5{
+            margin: 4% 0% 2%;
+            color: white;
+        }
+        .button {
+            margin: 2% 35% 0%;
+        }
+        .empty{
+            margin-left: 10%;
+            margin-top: 10%;
+        }
+        .buttonP{
+            margin: 6% 41% 2%;
+        }
+    </style>
+</head>
+<body >
+<nav class ="grey darken-4 ">
+    <div class="container nav-wrapper ">
+        <a href="/index" class="brand-logo"><img src="/assets/icon.png" class="logo-icon" alt="icon:logo"></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/companies">Акции</a></li>
+            <li><a href="/portfolios">Портфель</a></li>
+            <li><a href="/account">Профиль</a></li>
+            <li><a href="/">Выход</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div th:if="${portfoliosALL.size() == 0}" class="empty">
+        <h5>У вас еще нет ни одного портфеля. Создайте его прямо сейчас нажав на кнопку!</h5>
+        <a href="/newPortfolio" class="btn  btn-large amber button">Новый портфель</a>
+    </div>
+    <div th:unless="${portfoliosALL.size() == 0}" class="full">
+        <h4>Портфели</h4>
+
+        <table class="highlight striped ">
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Уникальное имя</th>
+                <th>Ставка налогообложения (%)</th>
+                <th>Ставка комиссии брокера (%)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each = "portfolio : ${portfoliosALL}">
+                <td th:text = "${portfolio.name}"></td>
+                <td th:text = "${portfolio.uniqueName}"></td>
+                <td th:text = "${portfolio.taxRate}"></td>
+                <td th:text = "${portfolio.commissionRate}"></td>
+                <td><a class="btn waves-effect  orange"  th:href="@{/portfolio-deal/{id}(id=${portfolio.id})}">Добавить сделку</a></td>
+                <td><a class="btn waves-effect orange"  th:href="@{/deals-portfolio/{id}(id=${portfolio.id})}">Просмотреть сделки</a></td>
+                <td><a class="btn waves-effect orange"  th:href="@{/portfolio-delete/{id}(id=${portfolio.id})}"  >Удалить</a></td>
+            </tr>
+            </tbody>
+        </table>
+        <a href="/newPortfolio" class="btn  btn-large waves-effect blue-grey darken-3 buttonP">Новый портфель</a>
+    </div>
+</div>
+</body>
+</html>

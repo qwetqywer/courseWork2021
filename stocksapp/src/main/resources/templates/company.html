@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Company</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/companyView.css"/>
+
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+  <script type="text/javascript" th:inline="javascript">
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.load('current', {'packages': ['corechart', 'line']});
+    google.charts.load('current', {'packages':['bar']});
+    google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(drawBasic);
+    google.charts.setOnLoadCallback(drawStuff);
+    google.charts.setOnLoadCallback(drawStuffCapital);
+
+    /*<![CDATA[*/
+
+        let profits = [];
+        let capitals = [];
+        let debts = [];
+        let debt;
+        let fcf = [];
+        let fcf_item;
+        let capital;
+        let profit;
+        profits.push(['Отчетный период', 'Чистая прибыль']);
+        capitals.push(['Отчетный период', 'Капитал']);
+        fcf.push(['Отчетный период', 'FCF']);
+        debts.push(['Отчетный период', 'Чистая долг']);
+    /*[# th:each="obj : ${annualStatistics}"]*/
+        dateNum = /*[[${obj.date}]]*/ "";
+        profit = [];
+        capital = [];
+        fcf_item = [];
+        debt = [];
+        debt.push(dateNum.split('T')[0]);
+        profit.push(dateNum.split('T')[0]);
+        capital.push(dateNum.split('T')[0]);
+        fcf_item.push(dateNum.split('T')[0]);
+        profit.push( /*[[${obj.netProfit}]]*/ );
+        capital.push(/*[[${obj.capital}]]*/);
+        fcf_item.push(/*[[${obj.FCF}]]*/);
+        debt.push(/*[[${obj.netDebt}]]*/);
+        profits.push(profit);
+        capitals.push(capital);
+        fcf.push(fcf_item);
+        debts.push(debt);
+    /*[/]*/
+    console.log("capitals");
+      console.log(capitals);
+
+    function drawStuff() {
+      let data = new google.visualization.arrayToDataTable(profits);
+      let fcfData =  new google.visualization.arrayToDataTable(fcf);
+      let debtData =  new google.visualization.arrayToDataTable(debts);
+      let options1 = {
+        legend: { position: 'none' },
+        bar: { groupWidth: "60%" },
+        colors: ['#3366cc','#3999', 'purple'],
+        backgroundColor: '#191c22',
+        chartArea:{
+          backgroundColor: '#191c22'
+        },
+        hAxis: {
+          textPosition: 'none'
+        },
+        legend: {position: 'none'}
+      };
+      let options = {
+        legend: { position: 'none' },
+        bar: { groupWidth: "60%" },
+        colors: ['#26a69a','#3999', 'purple'],
+        backgroundColor: '#191c22',
+        chartArea:{
+          backgroundColor: '#191c22'
+        },
+        hAxis: {
+          textPosition: 'none'
+        },
+        legend: {position: 'none'}
+      };
+
+      let chart = new google.charts.Bar(document.getElementById('profits-chart'));
+      chart.draw(data, google.charts.Bar.convertOptions(options));
+
+      let chartFCF = new google.charts.Bar(document.getElementById('FCF-chart'));
+      chartFCF.draw(fcfData, google.charts.Bar.convertOptions(options1));
+      let chartDebt = new google.charts.Bar(document.getElementById('debt-chart'));
+      chartDebt.draw(debtData, google.charts.Bar.convertOptions(options));
+
+    }
+    function drawStuffCapital() {
+      let data = new google.visualization.arrayToDataTable(capitals);
+      console.log(data);
+      let options = {
+        legend: { position: 'none' },
+        bar: { groupWidth: "60%" },
+        colors: ['#ef5351','#3999', 'purple'],
+        backgroundColor: '#191c22',
+        chartArea:{
+          backgroundColor: '#191c22'
+        },
+        hAxis: {
+          textPosition: 'none'
+        },
+        legend: {position: 'none'}
+      };
+      let chart = new google.charts.Bar(document.getElementById('capitals-chart'));
+      chart.draw(data, google.charts.Bar.convertOptions(options));
+    }
+
+    let data1 = [];
+    let itemData1;
+    /*[# th:each="page : ${stocksData}"]*/
+          dateNum = /*[[${page.date}]]*/ "";
+          itemData1 = [];
+          itemData1.push(dateNum.split('T')[0]);
+          itemData1.push(/*[[${page.openPrice}]]*/);
+          itemData1.push(/*[[${page.closePrice}]]*/);
+          itemData1.push(/*[[${page.highPrice}]]*/);
+          itemData1.push(/*[[${page.lowPrice}]]*/);
+          data1.push(itemData1);
+
+    /*[/]*/
+
+    /*]]>*/
+
+
+    /*<![CDATA[*/
+    let dataPrice = [];
+    let itemData;
+    let i = 1;
+    /*[# th:each="page : ${stocksData}"]*/
+    itemData = [];
+    itemData.push(i);
+    itemData.push(/*[[${page.closePrice}]]*/);
+    dataPrice.push(itemData);
+    i++;
+
+    /*[/]*/
+    let flowsData = [];
+    let flow;
+    flowsData.push( ['Дата',  'Прибыль','Выручка', 'Свободный поток','Операционный поток',  'EBITDA']);
+    console.log("flows");
+    /*[# th:each="obj : ${flows}"]*/
+      flow = [];
+      flow.push(/*[[${obj.date}]]*/);
+      flow.push(/*[[${obj.profit}]]*/);
+      flow.push(/*[[${obj.revenue}]]*/);
+      flow.push(/*[[${obj.freecashflow}]]*/);
+      flow.push(/*[[${obj.operatingcashflow}]]*/);
+      flow.push(/*[[${obj.ebitda}]]*/);
+      flowsData.push(flow);
+    /*[/]*/
+    console.log(flowsData);
+
+    let assetsData = [];
+    let asset;
+    assetsData.push( ['Дата', 'Капитал','Обязательства', 'Чистый долг']);
+    let currentL,termLiabilities,total;
+    /*[# th:each="obj : ${annualStatistics}"]*/
+    asset = [];
+    asset.push(/*[[${obj.date}]]*/);
+    currentL = /*[[${obj.currentLiabilities}]]*/ 1;
+    termLiabilities = /*[[${obj.termLiabilities}]]*/ 1;
+    total = currentL + termLiabilities;
+    asset.push(/*[[${obj.capital}]]*/);
+    asset.push(total);
+    asset.push(/*[[${obj.netDebt}]]*/);
+    assetsData.push(asset);
+    /*[/]*/
+
+    /*]]>*/
+
+    function drawChart() {
+      var data = google.visualization.arrayToDataTable(data1, true);
+
+      var options = {
+        legend:'none',
+        backgroundColor: '#191c22',
+        candlestick: {
+          fallingColor: { strokeWidth: 0, fill: '#ef5351' }, // red
+          risingColor: { strokeWidth: 0, fill: '#26a69a' }   // green
+        },
+        hAxis: {
+          textStyle: {
+            color: '#FFF',
+            fontSize: 14
+
+          },
+          titleTextStyle:{color: '#FFF'},
+        }
+      };
+
+      var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+
+      chart.draw(data, options);
+    }
+    function drawBasic() {
+
+      var data = new google.visualization.DataTable(dataPrice);
+      data.addColumn('number', 'Data');
+      data.addColumn('number', 'Stock Price');
+      data.addRows(dataPrice);
+      var options = {
+        hAxis: {
+          title: 'Day of month',
+          textStyle: {
+            color: '#FFF',
+            fontSize: 12
+
+          },
+          titleTextStyle:{
+            color: '#FFF',
+            fontSize: 13
+          },
+        },
+        vAxis: {
+          title: 'Stock Price',
+          textStyle: {
+            color: '#FFF',
+            fontSize: 12
+
+          },
+          titleTextStyle:{
+            color: '#FFF',
+            fontSize: 13
+          },
+        },
+        legend:'none',
+        chartArea:{
+          backgroundColor: '#191c22'
+        },
+        backgroundColor: '#191c22',
+        candlestick: {
+          fallingColor: { strokeWidth: 0, fill: '#ef5351' }, // red
+          risingColor: { strokeWidth: 0, fill: '#26a69a' }   // green
+        }
+      };
+
+      var chart = new google.visualization.LineChart(document.getElementById('chart_div_normal'));
+      chart.draw(data, options);
+    }
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawVisualization);
+    google.charts.load('current', {'packages':['line']});
+    google.charts.setOnLoadCallback(drawMultipliers);
+    function drawVisualization() {
+      // Some raw data (not necessarily accurate)
+      var data = google.visualization.arrayToDataTable(flowsData);
+      var dataAssets = google.visualization.arrayToDataTable(assetsData);
+      var options = {
+        seriesType: 'bars',
+        series: {4: {type: 'line'}},
+        backgroundColor: '#191c22',
+        chartArea:{
+          backgroundColor: '#191c22'
+        },
+        hAxis: {
+          textStyle: {
+            color: '#FFF',
+            fontSize: 14
+
+          },
+          titleTextStyle:{color: '#FFF'},
+        },
+        legend:{
+          textStyle: {
+            color: '#FFF',
+            fontSize: 14
+
+          },
+          titleTextStyle:{color: '#FFF'},
+        }
+
+      };
+      var optionsAssets = {
+        seriesType: 'bars',
+        series: {2: {type: 'line'}},
+        backgroundColor: '#191c22',
+        chartArea:{
+          backgroundColor: '#191c22'
+        },
+        hAxis: {
+          textStyle: {
+            color: '#FFF',
+            fontSize: 14
+
+          },
+          titleTextStyle:{color: '#FFF'},
+        },
+        legend:{
+          textStyle: {
+            color: '#FFF',
+            fontSize: 14
+
+          },
+          titleTextStyle:{color: '#FFF'},
+        }
+
+      };
+      var chart = new google.visualization.ComboChart(document.getElementById('flows-chart'));
+      chart.draw(data, options);
+      var chartAssets = new google.visualization.ComboChart(document.getElementById('assets-chart'));
+      chartAssets.draw(dataAssets, optionsAssets);
+    }
+    function drawMultipliers() {
+
+      /*<![CDATA[*/
+      let multipliers = [];
+      let stat;
+      let date = 1;
+
+      /*[# th:each="obj : ${multipliers}"]*/
+      stat = [];
+      stat.push(date);
+      stat.push(/*[[${obj.pe}]]*/);
+      stat.push(/*[[${obj.pfcf}]]*/);
+      stat.push(/*[[${obj.ps}]]*/);
+      stat.push(/*[[${obj.netdebtebitda}]]*/);
+      date++;
+      multipliers.push(stat);
+      /*[/]*/
+      console.log("mul", multipliers);
+      /*]]>*/
+      var data = new google.visualization.DataTable();
+      data.addColumn('number', 'Дата');
+      data.addColumn('number', 'PE');
+      data.addColumn('number', 'P/FCF');
+      data.addColumn('number', 'PS');
+      data.addColumn('number', 'Net Debt/EBITDA');
+
+      data.addRows(multipliers);
+
+      var options = {
+        hAxis: {
+          title: 'Day of month',
+          textStyle: {
+            color: '#FFF',
+            fontSize: 12
+
+          },
+          titleTextStyle:{
+            color: '#FFF',
+            fontSize: 13
+          },
+        },
+        vAxis: {
+          title: 'Stock Price',
+          textStyle: {
+            color: '#FFF',
+            fontSize: 12
+
+          },
+          titleTextStyle:{
+            color: '#FFF',
+            fontSize: 13
+          },
+        },
+        legend:'none',
+        backgroundColor: '#191c22',
+        chartArea:{
+          backgroundColor: '#191c22'
+        },
+        candlestick: {
+          fallingColor: { strokeWidth: 0, fill: '#ef5351' }, // red
+          risingColor: { strokeWidth: 0, fill: '#26a69a' }   // green
+        },
+        vAxis: {
+          gridlines: {
+            color: 'transparent'
+          }
+        }
+      };
+
+      var chart = new google.charts.Line(document.getElementById('multipliers-chart'));
+
+      chart.draw(data, google.charts.Line.convertOptions(options));
+    }
+
+
+  </script>
+</head>
+<body >
+<nav class ="grey darken-4 ">
+  <div class="container nav-wrapper ">
+    <a href="/index" class="brand-logo"><img src="/assets/icon.png" class="logo-icon" alt="icon:logo"></a>
+    <ul class="right hide-on-med-and-down">
+      <li><a href="/companies">Акции</a></li>
+      <li><a href="/portfolios">Портфель</a></li>
+      <li><a href="/account">Профиль</a></li>
+      <li><a href="/">Выход</a></li>
+    </ul>
+  </div>
+</nav>
+<main>
+  <div class="container ">
+    <span class="stocks-main"><a href="">Главная</a> / <a href="">Акции / </a> Компания</span>
+    <div class="row">
+      <form  th:action="@{/signin}"  method="post">
+        <div class="input-field col s8">
+          <input placeholder="Поиск по компаниям" id="companyName" type="text" class="validate">
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="container">
+    <h4>График цены акции Компании</h4>
+    <div id="chart_div" style="width: 100%; height: 700px;"></div>
+  </div>
+  <div class="container">
+    <h4>График цены акции Компании</h4>
+    <div id="chart_div_normal" style="width: 100%; height: 700px;"></div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col s6">
+        <h4>Чистая прибыль</h4>
+        <div id="profits-chart" style=" height: 300px;"></div>
+      </div>
+      <div class="col s6">
+        <h4>Капитал</h4>
+        <div id="capitals-chart" style=" height: 300px;" ></div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col s6">
+        <h4>FCF</h4>
+        <div id="FCF-chart" style=" height: 300px;"></div>
+      </div>
+      <div class="col s6">
+        <h4>Чистый долг</h4>
+        <div id="debt-chart" style=" height: 300px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container companies">
+    <div th:switch = "${annualStatistics}">
+      <h2 th:case = "null">Активы не были найдены!</h2>
+      <div th:case = "*"></div>
+      <h4>Активы <span th:text = "${companyName}"></span></h4>
+      <table class="striped allCompanies">
+        <thead>
+        <tr>
+          <th>Дата отч. периода</th>
+          <th>Капитализация</th>
+          <th>Капитал</th>
+          <th>К.О</th>
+          <th>Д.О</th>
+          <th>Чистый долг</th>
+          <th>Активы</th>
+          <th>Всего акций</th>
+          <th>Цена акции</th>
+
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each = "statistic: ${annualStatistics}">
+          <td th:text = "${statistic.getDate().split('T')[0]}"></td>
+          <td th:text = "${statistic.getCapitalization()}"></td>
+          <td th:text = "${statistic.getCapital()}"></td>
+          <td th:text = "${statistic.getCurrentLiabilities()}"></td>
+          <td th:text = "${statistic.getTermLiabilities()}"></td>
+          <td th:text = "${statistic.getNetDebt()}"></td>
+          <td th:text = "${statistic.getAssets()}"></td>
+          <td th:text = "${statistic.getTotalShares()}"></td>
+          <td th:text = "${statistic.getPriceShare()}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="container">
+    <h4>Активы <span th:text = "${companyName}"></span></h4>
+    <div id="assets-chart" style="width: 100%; height: 700px;"></div>
+  </div>
+  <div class="container companies">
+    <div th:switch = "${flows}">
+      <h2 th:case = "null">Денежные потоки не были найдены!</h2>
+      <div th:case = "*"></div>
+      <h4>Денежные потоки <span th:text = "${companyName}"></span></h4>
+      <table class="striped allCompanies">
+        <thead>
+        <tr>
+          <th>Дата отч. периода</th>
+          <th>Выручка</th>
+          <th>Прибыль</th>
+          <th>EBITDA</th>
+          <th>Операционный ден.поток</th>
+          <th>Свободный ден.поток</th>
+          <th>EPS</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each = "flow: ${flows}">
+          <td th:text = "${flow.getDate().split('T')[0]}"></td>
+          <td th:text = "${flow.getRevenue()}"></td>
+          <td th:text = "${flow.getProfit()}"></td>
+          <td th:text = "${flow.getEbitda()}"></td>
+          <td th:text = "${flow.getOperatingcashflow()}"></td>
+          <td th:text = "${flow.getFreecashflow()}"></td>
+          <td th:text = "${flow.getEps()}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="container">
+    <h4>Денежные потоки <span th:text = "${companyName}"></span></h4>
+    <div id="flows-chart" style="width: 100%; height: 700px;"></div>
+  </div>
+
+  <div class="container companies">
+    <div th:switch = "${multipliers}">
+      <h2 th:case = "null">Мультипликаторы не были найдены!</h2>
+      <div th:case = "*"></div>
+      <h4>Мультипликаторы <span th:text = "${companyName}"></span></h4>
+      <table class="striped allCompanies">
+        <thead>
+        <tr>
+          <th>Дата отч. периода</th>
+          <th>P/E</th>
+          <th>E/P</th>
+          <th>P/B</th>
+          <th>P/S</th>
+          <th>P/FCF</th>
+          <th>Net Debt/EBITDA</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each = "multiplier: ${multipliers}">
+          <td th:text = "${multiplier.getDate()}"></td>
+          <td th:text = "${multiplier.getPe()}"></td>
+          <td th:text = "${multiplier.getEp()}"></td>
+          <td th:text = "${multiplier.getPb()}"></td>
+          <td th:text = "${multiplier.getPs()}"></td>
+          <td th:text = "${multiplier.getPfcf()}"></td>
+          <td th:text = "${multiplier.getNetdebtebitda()}"></td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <div class="container">
+    <h4>Мультипликаторы <span th:text = "${companyName}"></span></h4>
+    <div id="multipliers-chart" style="width: 100%; height: 700px;"></div>
+  </div>
+
+</main>
+</body>
+</html>

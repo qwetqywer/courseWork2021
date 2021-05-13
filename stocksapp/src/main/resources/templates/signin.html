@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/signup.css"/>
+    <title>Sing in</title>
+</head>
+<body>
+<nav class ="grey darken-4 ">
+    <div class="container nav-wrapper ">
+        <a href="/index" class="brand-logo"><img src="/assets/icon.png" class="logo-icon" alt="icon:logo"></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/signin">Вход</a></li>
+            <li><a href="/signup">Регистрация</a></li>
+        </ul>
+    </div>
+</nav>
+<main>
+    <div class="container">
+        <div th:switch = "${status}">
+            <div th:case = "signin">
+                <div class="wrapper">
+                    <div class="row title">
+                        <h4>Пожалуйста, введите логин и пароль</h4>
+                    </div>
+                    <div class="row" style="margin-left: 35%;">
+                        <form  th:action="@{/signin}" th:object="${user}" method="post">
+                            <div class="input-field col s8">
+                                <input  id="email" type="email" class="validate" th:field="*{email}" required>
+                                <label class="active" for="email">Email</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <input  id="password" type="password" class="validate"
+                                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
+                                        pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}" th:field="*{password}" required>
+                                <label class="active" for="password">Пароль</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <button class="btn waves-effect blue-grey darken-3 btn-submit" type="submit" name="action">Вход</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="row">
+                        <h5>Если вы ещё не зарегистрированы, <a href="/signup">Зарегистрируйтесь</a></h5>
+                    </div>
+                </div>
+            </div>
+            <div th:case = "success">
+                <div class="row">
+                    <div class="col s12 m5 " style="margin: 15% 25% 1%">
+                        <div class="card-panel  orange lighten-1 info-message" >
+                            <span class="white-text">Успешная авторизация</span>
+                        </div>
+                    </div>
+                    <div class="col s12 m5" style="margin-left: 31%" >
+                        <h5>Перейдите на главную страницу. <a href="/main">Нажмите здесь!</a></h5>
+                    </div>
+                </div>
+
+            </div>
+            <div th:case = "notexist">
+                <div class="row">
+                    <div class="col s12 m5 "  style="margin: 15% 25% 5%">
+                        <div class="card-panel red lighten-1" >
+                            <span class="white-text">Не удалось авторизоваться. Попробуйте снова</span>
+                        </div>
+                    </div>
+                    <button class="btn waves-effect amber btn-repeat"  onclick="window.location='/signin'">Повторить</button>
+                </div>
+
+            </div>
+
+            <div th:case = "error">
+                <div class="row">
+                    <div class="col s12 m5 "  style="margin: 15% 25% 5%">
+                        <div class="card-panel red lighten-1" >
+                            <span class="white-text">Что-то пошло не так! Повторите снова</span>
+                        </div>
+                    </div>
+                    <button class="btn waves-effect amber btn-repeat"  onclick="window.location='/signin'">Повторить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

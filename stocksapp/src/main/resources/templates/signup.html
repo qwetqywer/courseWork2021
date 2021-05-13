@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/signup.css"/>
+    <title>Sing up</title>
+</head>
+<body>
+<nav class ="grey darken-4 ">
+    <div class="container nav-wrapper ">
+        <a href="/index" class="brand-logo"><img src="/assets/icon.png" class="logo-icon" alt="icon:logo"></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/signin">Вход</a></li>
+            <li><a href="/signup">Регистрация</a></li>
+        </ul>
+    </div>
+</nav>
+<main>
+    <div class="container">
+        <div th:switch = "${status}">
+            <div th:case = "register">
+                <div class="wrapper">
+                    <div class="row title">
+                        <h4>Пожалуйста, пройдите несложную регистрацию.</h4>
+                        <h4>Это займёт несколько секунд.</h4>
+                    </div>
+                    <div class="row form">
+                        <form  th:action="@{/signup}" th:object="${user}" method="post">
+                            <div class="input-field col s8">
+                                <input  id="first_name" type="text" class="validate" th:field="*{firstName}"
+                                        pattern = "^[a-zA-Z]+$" required title="Must contain only letters">
+                                <label class="active" for="first_name">Имя</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <input  id="last_name" type="text" class="validate" th:field="*{lastName}"
+                                        pattern = "^[a-zA-Z]+$" title="Must contain only letters"
+                                        required>
+                                <label class="active" for="last_name">Фамилия</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <input  id="email" type="email" class="validate" th:field="*{email}" required>
+                                <label class="active" for="email">Email</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <input  id="password" type="password" class="validate"
+                                        title="Must contain at least one number and one uppercase and lowercase letter, and at least 6 or more characters"
+                                        pattern = "(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=\S+$).{6,}" th:field="*{password}" required>
+                                <label class="active" for="password">Пароль</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <button class="btn waves-effect blue-grey darken-3 btn-submit" type="submit" name="action">Регистрация</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div th:case = "saved">
+                <div class="row">
+                    <div class="col s12 m5 " style="margin: 15% 25%">
+                        <div class="card-panel  orange lighten-1 info-message" >
+                            <span class="white-text">Успешная регистрация</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:case = "email">
+                <div class="row">
+                    <div class="col s12 m5 "  style="margin: 15% 25% 5%">
+                        <div class="card-panel red lighten-1" >
+                            <span class="white-text">Пользователь с таким email уже зарегистрирован! Повторите снова</span>
+                        </div>
+                    </div>
+                    <button class="btn waves-effect amber btn-repeat"  onclick="window.location='/signup'">Повторить</button>
+                </div>
+
+            </div>
+
+            <div th:case = "error">
+                <div class="row">
+                    <div class="col s12 m5 "  style="margin: 15% 25% 5%">
+                        <div class="card-panel red lighten-1" >
+                            <span class="white-text">Произошла ошибка регистрации! Повторите снова</span>
+                        </div>
+                    </div>
+                    <button class="btn waves-effect amber btn-repeat"  onclick="window.location='/signup'">Повторить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

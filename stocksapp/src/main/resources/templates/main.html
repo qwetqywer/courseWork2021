@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Companies</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/main.css"/>
+    <script>
+        function sortStatistic(){
+            let statistics = /*[[${statistics}]]*/ [];
+            console.log("ab",statistics);
+
+        }
+
+    </script>
+</head>
+<body onLoad="sortStatistic()">
+
+<nav class ="grey darken-4 ">
+    <div class="container nav-wrapper ">
+        <a href="/index" class="brand-logo"><img src="/assets/icon.png" class="logo-icon" alt="icon:logo"></a>
+        <ul class="right hide-on-med-and-down">
+            <!--  <li><a href="/signup">Регистрация</a></li>-->
+            <li><a href="/companies">Акции</a></li>
+            <li><a href="/portfolios">Портфель</a></li>
+            <li><a href="/account">Профиль</a></li>
+            <li><a href="/">Выход</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main>
+    <div class="container">
+        <span class="stocks-main"><a href="/companies">Акции</a> / Главная</span>
+        <div class="row">
+            <form  th:action="@{/signin}"  method="post">
+                <div class="input-field col s8">
+                    <input placeholder="Поиск по компаниям" id="companyName" type="text" class="validate">
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="container companies">
+        <h4>Акции - лидеры роста</h4>
+        <table class="striped allCompanies" >
+            <thead>
+            <tr>
+                <th class="name-column">Название</th>
+                <th class="stat-column">Цена</th>
+                <th class="stat-column">% изм</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each = "statistic: ${statisticsUp}" >
+
+                <td class="name-column"><a th:href="@{/company/{id}(id=${statistic.companyId})}"  th:text = "${statistic.companyTicker}"></a></td>
+                <td class="stat-column" th:text = "${ '$ ' + statistic.stockPrice}"></td>
+                <td class="stat-column changePL"  th:text = "${statistic.change + '%'}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <h4>Акции - лидеры падения</h4>
+        <table class="striped allCompanies" >
+            <thead>
+            <tr>
+                <th class="name-column">Название</th>
+                <th class="stat-column">Цена</th>
+                <th class="stat-column">% изм</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each = "statistic: ${statisticsDown}" >
+
+                <td class="name-column"><a th:href="@{/company/{id}(id=${statistic.companyId})}"  th:text = "${statistic.companyTicker}"></a></td>
+                <td class="stat-column" th:text = "${  '$ ' + statistic.stockPrice}"></td>
+                <td class="stat-column changeM" th:text = "${statistic.change + '%'}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>

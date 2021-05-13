@@ -1,0 +1,83 @@
+a, span{
+    font-size: 17px;
+    color: white;
+}
+span a:hover{
+    color: #ffc107;
+}
+table a{
+    color: #32dadc;
+    font-size: 15px;
+}
+table a:hover{
+    color: #dcdcdc;;
+}
+table th{
+    font-weight: bold;
+}
+body{
+    background: #1e2129;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+.logo-icon {
+    width: 42px;
+    height: 45px;
+    margin-top: 8px;
+}
+.grey.darken-4 {
+    background-color: #191c22 !important;
+}
+main{
+    margin-top: 3%;
+}
+form{
+    margin-left: 15%;
+    margin-top: 2%;
+}
+.input-field [type=text], .input-field [type=email], .input-field [type=password],.input-field [type=date]{
+    color: #4a5362;
+    font-weight: 400;
+    font-size: 25px;
+    letter-spacing: 1px;
+}
+/* label focus color */
+.input-field input:focus + label, .materialize-textarea:focus:not([readonly]) + label {
+    color: #dcdbdb !important;
+}
+/* label underline focus color */
+.input-field input:focus, .materialize-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid #ffc107 !important;
+    box-shadow: 0 1px 0 0 #ffc107 !important;
+}
+/* label focus color */
+.input-field input:focus + label {
+    color: #4a5362;
+}
+.input-field [type=text]::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #ffc107;
+
+}
+
+.companies{
+    margin-bottom: 4%;
+}
+.allCompanies{
+    background-color: #191c22 !important;
+}
+table{
+    color: #dcdcdc;
+}
+
+table.striped>tbody>tr{
+    background-color: #242832 !important;
+}
+table.striped>tbody>tr:nth-child(odd) {
+    background-color: #292e39 !important;
+}
+table>tbody>tr:hover{
+    background-color: #1e2129 !important;
+}
+table.striped>tbody>tr:nth-child(odd):hover {
+    background-color: #1e2129 !important;
+}

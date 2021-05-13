@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All_Deals</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="/css/companies.css"/>
+    <style>
+        .logo-icon {
+            width: 42px;
+            height: 45px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body >
+<nav class ="grey darken-4 ">
+    <div class="container nav-wrapper ">
+        <a href="/index" class="brand-logo"><img src="/assets/icon.png" class="logo-icon" alt="icon:logo"></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/companies">Акции</a></li>
+            <li><a href="/portfolios">Портфель</a></li>
+            <li><a href="/account">Профиль</a></li>
+            <li><a href="/">Выход</a></li>
+        </ul>
+    </div>
+</nav>
+<div class="container">
+    <div th:switch = "${deals}" th:action="@{/deals}">
+        <h2 th:case = "null">Сделок нет</h2>
+        <div th:case = "*"></div>
+        <h4 color="white">Сделки</h4>
+        <table class="highlight striped">
+            <thead>
+            <tr>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Ставка комиссии(%)</th>
+                <th>Общая сумма</th>
+                <th>Дата</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each = "deal : ${deals}">
+                <td th:text = "${deal.getPrice()}"></td>
+                <td th:text = "${deal.getAmount()}"></td>
+                <td th:text = "${deal.getCommission()}"></td>
+                <td th:text = "${deal.getTotalAmount()}"></td>
+                <td th:text = "${deal.getDate()}"></td>
+                <td><a class="btn amber"  th:href="@{/deal-delete/{id}(id=${deal.id})}"  >Удалить</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

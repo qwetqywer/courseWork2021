@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/signup.css"/>
+    <title>Sing up</title>
+    <style>
+        .form {
+            margin-left: 30%;
+        }
+    </style>
+</head>
+<body>
+<nav class ="grey darken-4 ">
+    <div class="container nav-wrapper ">
+        <a href="/index" class="brand-logo"><img src="/assets/icon.png" class="logo-icon" alt="icon:logo"></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/companies">Акции</a></li>
+            <li><a href="/portfolios">Портфель</a></li>
+            <li><a href="/account">Профиль</a></li>
+            <li><a href="/">Выход</a></li>
+        </ul>
+    </div>
+</nav>
+<main>
+    <div class="container">
+        <div th:switch = "${status}">
+            <div th:case = "register">
+                <div class="wrapper">
+                    <div class="row title">
+                        <h4>Создание портфеля</h4>
+                    </div>
+                    <div class="row form">
+                        <form  th:action="@{/newPortfolio}" th:object="${portfolio}" method="post">
+                            <div class="input-field col s8">
+                                <input  id="name" type="text" class="validate" th:field="*{name}"
+                                        pattern = "^[a-zA-Z]+$" required title="Must contain only letters">
+                                <label class="active" for="name">Название</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <input  id="taxRate" type="text" class="validate"
+                                        title="Must contain only numbers"
+                                        pattern = "^[0-9][0-9]?$|^100$" th:field="*{taxRate}" required>
+                                <label class="active" for="taxRate">Ставка налогообложения (%)</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <input  id="commissionRate" type="text" class="validate"
+                                        title="Must contain only numbers"
+                                        pattern = "^[0-9][0-9]?$|^100$" th:field="*{commissionRate}" required>
+                                <label class="active" for="commissionRate">Ставка комиссии брокера (%)</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <button class="btn waves-effect blue-grey darken-3 btn-submit" type="submit" name="action">Сохранить</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div th:case = "saved">
+                <div class="row">
+                    <div class="col s12 m5 " style="margin: 15% 25%">
+                        <div class="card-panel  orange lighten-1 info-message" >
+                            <span class="white-text">Портфель создан!</span>
+                        </div>
+                    </div>
+                    <div class="col s12 m5" style="margin-left: 31%" >
+                        <h5>Перейдите к своим портфелям. <a href="/portfolios">Нажмите здесь!</a></h5>
+                    </div>
+                </div>
+            </div>
+            <div th:case = "error">
+                <div class="row">
+                    <div class="col s12 m5 "  style="margin: 15% 25% 5%">
+                        <div class="card-panel red lighten-1" >
+                            <span class="white-text">Произошла ошибка при создании портфеля! Повторите снова</span>
+                        </div>
+                    </div>
+                    <button class="btn waves-effect amber btn-repeat"  onclick="window.location='/portfolios'">Повторить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

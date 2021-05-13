@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>All_Users</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <style>
+        .logo-icon {
+            width: 42px;
+            height: 45px;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body >
+<nav class ="grey darken-4 ">
+    <div class="container nav-wrapper ">
+        <a href="/index" class="brand-logo"><img src="/assets/icon.png" class="logo-icon" alt="icon:logo"></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/signin">Вход</a></li>
+            <li><a href="/signup">Регистрация</a></li>
+            <li><a href="/companies">Акции</a></li>
+            <li><a href="/portfolios">Портфель</a></li>
+        </ul>
+    </div>
+</nav>
+    <div class="container">
+        <div th:switch = "${users}">
+            <h2 th:case = "null">Пользователи не были найдены!</h2>
+            <div th:case = "*"></div>
+            <h3>Пользователи</h3>
+            <table class="highlight">
+                <thead>
+                <tr>
+                    <th>Фамилия</th>
+                    <th>Имя</th>
+                    <th>Почта</th>
+                    <th>Удалить</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each = "user : ${users}">
+                    <td th:text = "${user.lastName}"></td>
+                    <td th:text = "${user.firstName}"></td>
+                    <td th:text = "${user.email}"></td>
+                    <td><a class="btn amber"  th:href="@{/user-delete/{id}(id=${user.id})}"  >Удалить</a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

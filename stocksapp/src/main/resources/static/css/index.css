@@ -1,0 +1,37 @@
+body{
+    background:lightslategrey url("../assets/fon.png");
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+}
+.logo-icon {
+    width: 100px;
+}
+h4{
+    color: #4a5362;
+    font-weight: 300;
+    font-size: 25px;
+    letter-spacing: 1px;
+}
+h1{
+    color: #ffc107;
+    font-size: 50px;
+    margin-top: 30px;
+    margin-left: 20px;
+}
+.btn-enter{
+    padding-right: 20px;
+    padding-left: 20px;
+}
+.logo{
+    margin-top: 8%;
+}
+.subtitle{
+    margin-top: 10%;
+}
+.btn-start{
+    padding: 15px 60px;
+}
+.start{
+    margin-top: 5%;
+}
+

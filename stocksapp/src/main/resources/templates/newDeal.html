@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/companies.css"/>
+    <link rel="stylesheet" href="/css/signup.css"/>
+    <title>Sing up</title>
+    <style>
+        table{
+            width: 80%;
+            margin-left: 10%;
+        }
+        .ticker-form {
+            width: 80%;
+            margin-left: 10%;
+            margin-top: 8%;
+        }
+        .searh-btn{
+            margin-left: 44%;
+        }
+        h4{
+            color:#ffc107;
+            font-weight: 300;
+            font-size: 24px;
+            letter-spacing: 1px;
+            margin-bottom: 1%;
+            margin-left: 21%;
+        }
+        form {
+            margin-left: 20%;
+            margin-top: 2%;
+        }
+    </style>
+</head>
+<body onload="document.getElementById('date').valueAsDate = new Date();">
+<nav class ="grey darken-4 ">
+    <div class="container nav-wrapper ">
+        <a href="/index" class="brand-logo"><img src="/assets/icon.png" class="logo-icon" alt="icon:logo"></a>
+        <ul class="right hide-on-med-and-down">
+            <li><a href="/companies">Акции</a></li>
+            <li><a href="/portfolios">Портфель</a></li>
+            <li><a href="/account">Профиль</a></li>
+            <li><a href="/">Выход</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main>
+    <div class="container companies">
+
+        <div th:switch = "${status}">
+            <div th:case = "search">
+                <form th:action="@{/searchCompany}" th:object="${company}" method="post" class="ticker-form">
+                    <div class="input-field col s8" >
+                        <input id="ticker" type="text" class="validate" th:field="*{ticker}"
+                               pattern = "^[a-zA-Z]+$" required title="Must contain only letters">
+                        <label class="active" for="ticker">Тикер</label>
+                    </div>
+                    <div class="input-field col s8">
+                        <button class="btn waves-effect orange btn-submit search-btn" type="submit" name="action">Поиск</button>
+                    </div>
+                </form>
+
+
+                    <table class="striped allCompanies">
+                        <thead>
+                        <tr>
+                            <th>Компания</th>
+                            <th>Тикер</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each = "statistic: ${statistics}">
+                            <td ><a th:href="@{/company/{id}(id=${statistic.companyId})}"  th:text = "${statistic.name}"></a></td>
+                            <td th:text = "${statistic.ticker}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+            </div>
+            <div th:case = "notFound">
+                <div class="row">
+                    <div class="col s12 m5 " style="margin: 15% 25%">
+                        <div class="card-panel  orange lighten-1 info-message" >
+                            <span class="white-text">Компания не найдена</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:case = "add">
+                <div class="wrapper">
+                    <div class="row title">
+                        <h4>Создание сделки</h4>
+                    </div>
+                    <div class="row form">
+                        <form  th:action="@{/newDeal}" th:object="${deal}" method="post">
+                            <div class="input-field col s8">
+                                <input  id="date" type="date"
+                                        th:field="*{date}" required>
+                                <label class="active" for="date">Дата</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <input  id="price" type="text"
+                                         th:field="*{price}" onchange="autofill()" required>
+                                <label class="active" for="price">Цена</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <input  id="amount" type="text" class="validate"
+                                        title="Must contain only numbers"
+                                        th:field="*{amount}" onchange="autofill()" required>
+                                <label class="active" for="amount">Кол-во</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <input  id="commission" type="text" class="validate"
+                                        title="Must contain only numbers"
+                                        pattern = "^[0-9][0-9]?$|^100$" th:field="*{commission}" onchange="autofill()" required>
+                                <label class="active" for="commission">Комиссия</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <input  id="totalAmount" type="text"  th:field="*{totalAmount}"  required>
+                                <label class="active" for="totalAmount">Общая сумма</label>
+                            </div>
+                            <div class="input-field col s8">
+                                <form th:action="@{/deals}"  method="get">
+                                    <button class="btn waves-effect blue-grey darken-3 btn-submit" type="submit" name="action">Сохранить</button>
+                                </form>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div th:case = "saved">
+            <div class="row">
+                <div class="col s12 m5 " style="margin: 15% 25% 1%">
+                    <div class="card-panel  orange lighten-1 info-message" >
+                        <span class="white-text">Сделка создана</span>
+                    </div>
+                </div>
+                <div class="col s12 m5" style="margin-left: 31%" >
+                    <h5>Перейдите к своим сделкам. <a href="/deals">Нажмите здесь!</a></h5>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+</main>
+<script>
+    function autofill(){
+        let commission = document.getElementById('commission').value;
+        let amount = document.getElementById('amount').value;
+        let price = document.getElementById('price').value;
+        document.getElementById('totalAmount').value = amount * price * commission/100 ;
+    }
+</script>
+</body>
+</html>
